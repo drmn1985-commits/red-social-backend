@@ -1,28 +1,22 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-
+const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
-const PORT = 5000;
 
-// ✅ Middleware
-app.use(cors());
 app.use(express.json());
 
-// ✅ Conexión a MongoDB Atlas
-mongoose.connect("mongodb+srv://juanpablo:Dibvick20@cluster0.ja9apy2.mongodb.net/redsocial", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ Conectado a MongoDB Atlas"))
-.catch((error) => console.error("❌ Error al conectar con MongoDB:", error));
+// Conexión a MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅ Conectado a MongoDB Atlas'))
+  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-// ✅ Ruta de prueba
-app.get("/", (req, res) => {
-  res.send("Servidor del backend funcionando correctamente ✅");
+// Ruta básica para probar Render
+app.get('/', (req, res) => {
+  res.send('🚀 Backend de la red social funcionando correctamente en Render!');
 });
 
-// ✅ Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor del backend corriendo en http://localhost:${PORT}`);
+// Puerto dinámico (Render asigna uno automáticamente)
+const PORT = process.env.PORT || 10000;
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Servidor del backend corriendo en el puerto ${PORT}`);
 });
