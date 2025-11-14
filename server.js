@@ -9,12 +9,12 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Conectado a MongoDB Atlas'))
   .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-// Ruta básica para probar Render
+// Ruta de prueba
 app.get('/', (req, res) => {
-  res.send('🚀 Backend de la red social funcionando correctamente en Render!');
+  res.send('🚀 Backend funcionando correctamente en Render!');
 });
 
-// Puerto dinámico (Render asigna uno automáticamente)
+// Render requiere esto
 const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, '0.0.0.0', () => {
