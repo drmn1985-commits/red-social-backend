@@ -1,45 +1,38 @@
-// ----------------------------
-// Backend para Render (listo)
-// ----------------------------
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
-require('dotenv').config();       // Cargar variables de entorno
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+dotenv.config();
 
 const app = express();
-
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Puerto dinámico para Render
-const PORT = process.env.PORT || 10000;
+// 🔹 Conexión a MongoDB
+const uri = process.env.MONGODB_URI;
 
-// Obtener la URI de MongoDB desde Render
-const MONGO_URI = process.env.MONGODB_URI;
+mongoose.connect(uri)
+  .then(() => console.log('✅ Conexión a MongoDB exitosa'))
+  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
-// Validación por si no existe
-if (!MONGO_URI) {
-  console.error("❌ ERROR: La variable MONGODB_URI no está definida.");
-  process.exit(1);
-}
-
-// Conectar a MongoDB Atlas
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
-  .catch((err) => {
-    console.error("❌ Error conectando a MongoDB:", err);
-    process.exit(1);
-  });
-
-// Ruta simple para probar el backend
-app.get("/", (req, res) => {
-  res.send("🚀 Backend funcionando correctamente en Render");
+// 🔹 Ruta raíz ahora manejada por Express
+app.get('/', (req, res) => {
+  res.send('🚀 Backend funcionando correctamente ✔️');
 });
 
-// Iniciar servidor
+// 🔹 Ruta de prueba API
+app.get('/api/test', (req, res) => {
+  res.json({ message: "API funcionando correctamente ✔️" });
+});
+
+// 🔹 Para cualquier otra ruta que no exista
+app.all('*', (req, res) => {
+  res.status(404).json({ error: "Ruta no encontrada" });
+});
+
+const PORT = process.env.PORT || 10000;
+
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor del backend corriendo en el puerto ${PORT}`);
+  console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
