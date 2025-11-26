@@ -9,9 +9,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ------------------------------
-// 🚀 RUTA DE PRUEBA
-// ------------------------------
 app.get("/api/test", (req, res) => {
   res.json({
     mensaje: "Backend funcionando correctamente 🎉",
@@ -19,14 +16,8 @@ app.get("/api/test", (req, res) => {
   });
 });
 
-// ------------------------------
-// 🚀 CONECTAR A MONGO
-// ------------------------------
 connectDB();
 
-// ------------------------------
-// 🚀 INICIAR SERVIDOR
-// ------------------------------
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
