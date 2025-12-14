@@ -1,0 +1,123 @@
+{
+  "info": {
+    "name": "RedSocialBackend_Variables",
+    "_postman_id": "1234abcd-5678-90ef-ghij-1234567890kl",
+    "description": "Colección de prueba con variables de entorno para API de Red Social Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Obtener usuarios (GET)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/usuarios",
+          "host": ["{{base_url}}"],
+          "path": ["api","usuarios"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "console.log('Usuarios:');",
+              "let data = pm.response.json();",
+              "console.log(data);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Crear usuario (POST)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Juan\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/usuarios",
+          "host": ["{{base_url}}"],
+          "path": ["api","usuarios"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 or 201', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);",
+              "});",
+              "// Guardar el _id del usuario en la variable de entorno",
+              "let data = pm.response.json();",
+              "pm.environment.set('user_id', data._id);",
+              "console.log('Usuario creado:', data);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actualizar usuario (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Juan Actualizado\",\n  \"email\": \"juanactual@example.com\",\n  \"password\": \"123456\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/usuarios/{{user_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api","usuarios","{{user_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "console.log('Usuario actualizado:', pm.response.json());"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Eliminar usuario (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/usuarios/{{user_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api","usuarios","{{user_id}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 or 204', function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,204]);",
+              "});",
+              "console.log('Usuario eliminado');"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
